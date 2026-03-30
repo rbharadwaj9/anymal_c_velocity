@@ -1,12 +1,16 @@
 """ANYbotics ANYmal C velocity environment configurations."""
 
+from pathlib import Path
+from mjlab.entity import EntityCfg
 from mjlab.envs import ManagerBasedRlEnvCfg
 from mjlab.envs.mdp.actions import JointPositionActionCfg
 from mjlab.managers.termination_manager import TerminationTermCfg
+from mjlab.scene import SceneCfg
 from mjlab.sensor import ContactMatch, ContactSensorCfg, RayCastSensorCfg
 from mjlab.tasks.velocity import mdp
 from mjlab.tasks.velocity.mdp import UniformVelocityCommandCfg
 from mjlab.tasks.velocity.velocity_env_cfg import make_velocity_env_cfg
+import mujoco
 
 from anymal_c_velocity.anymal_c.anymal_c_constants import (
   ANYMAL_C_ACTION_SCALE,
@@ -140,6 +144,18 @@ def anymal_c_flat_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
   cfg.sim.njmax = 300
   cfg.sim.mujoco.ccd_iterations = 50
   cfg.sim.contact_sensor_maxmatch = 64
+
+  _ROOM_XML = Path(__file__).parent.parent.parent / "assets" / "train_1_ceiling.xml"
+
+  def _get_roomspec() -> mujoco.MjSpec:
+      return mujoco.MjSpec.from_file(str(_ROOM_XML))
+
+  room_entity = EntityCfg(
+      spec_fn=_get_roomspec,
+  )
+
+  cfg.scene.entities["room"] = room_entity
+
 
   # Switch to flat terrain.
   assert cfg.scene.terrain is not None
