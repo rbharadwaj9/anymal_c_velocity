@@ -54,6 +54,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "mjlab" },
+    { name = "mjlab-map-adapted" },
 ]
 
 [package.dev-dependencies]
