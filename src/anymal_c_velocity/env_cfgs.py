@@ -6,7 +6,7 @@ from mjlab.envs import ManagerBasedRlEnvCfg
 from mjlab.envs.mdp.actions import JointPositionActionCfg
 from mjlab.managers.termination_manager import TerminationTermCfg
 from mjlab.scene import SceneCfg
-from mjlab.sensor import CameraSensorCfg, ContactMatch, ContactSensorCfg, RayCastSensorCfg
+from mjlab.sensor import ContactMatch, ContactSensorCfg, RayCastSensorCfg
 from mjlab.tasks.velocity import mdp
 from mjlab.tasks.velocity.mdp import UniformVelocityCommandCfg
 from mjlab.tasks.velocity.velocity_env_cfg import make_velocity_env_cfg
@@ -80,9 +80,9 @@ def anymal_c_rough_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
     cfg.viewer.distance = 2.0
     cfg.viewer.elevation = -10.0
 
-    # cfg.observations["critic"].terms["foot_height"].params[
-    #     "asset_cfg"
-    # ].site_names = site_names
+    cfg.observations["critic"].terms["foot_height"].params[
+        "asset_cfg"
+    ].site_names = site_names
 
     cfg.events["foot_friction"].params["asset_cfg"].geom_names = geom_names
     cfg.events["base_com"].params["asset_cfg"].body_names = ("base",)
@@ -106,7 +106,7 @@ def anymal_c_rough_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
     cfg.rewards["upright"].params["asset_cfg"].body_names = ("base",)
     cfg.rewards["body_ang_vel"].params["asset_cfg"].body_names = ("base",)
 
-    for reward_name in ["foot_clearance", "foot_slip"]:
+    for reward_name in ["foot_clearance", "foot_swing_height", "foot_slip"]:
         cfg.rewards[reward_name].params["asset_cfg"].site_names = site_names
 
     cfg.rewards["body_ang_vel"].weight = 0.0
@@ -145,23 +145,8 @@ def anymal_c_flat_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
     cfg = anymal_c_rough_env_cfg(play=play)
 
     cfg.sim.njmax = 5000
-    cfg.sim.mujoco.ccd_iterations = 50
+    cfg.sim.mujoco.ccd_iterations = 500
     cfg.sim.contact_sensor_maxmatch = 64
-
-    # # # Fixed overhead camera on the worldbody.
-    # cam = CameraSensorCfg(
-    #     name="fov_cam",
-    #     parent_body="robot/base",
-    #     pos=(0.513, 0, 0.01497),
-    #     quat=(-0.5, -0.5, 0.5, 0.5),
-    #     fovy=60.0,
-    #     width=320,
-    #     height=240,
-    #     data_types=("segmentation",),
-    #     use_textures=False,
-    #     # use_shadows=True
-    # )
-    # cfg.scene.sensors += (cam, )
 
     # _ROOM_XML = (
     #     Path(__file__).parent.parent.parent.parent

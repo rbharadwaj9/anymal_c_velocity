@@ -5,7 +5,7 @@ from pathlib import Path
 import mujoco
 from mjlab.actuator import BuiltinPositionActuatorCfg
 from mjlab.entity import EntityArticulationInfoCfg, EntityCfg
-# from mjlab.utils.os import update_assets
+from mjlab.utils.os import update_assets
 from mjlab.utils.spec_config import CollisionCfg
 
 ##
@@ -17,16 +17,16 @@ _HERE = Path(__file__).parent
 ANYMAL_C_XML: Path = _HERE / "xmls" / "anymal_c.xml"
 assert ANYMAL_C_XML.exists()
 
-#
-# def get_assets(meshdir: str) -> dict[str, bytes]:
-#     assets: dict[str, bytes] = {}
-#     update_assets(assets, ANYMAL_C_XML.parent / "assets", meshdir)
-#     return assets
+
+def get_assets(meshdir: str) -> dict[str, bytes]:
+    assets: dict[str, bytes] = {}
+    update_assets(assets, ANYMAL_C_XML.parent / "assets", meshdir)
+    return assets
 
 
 def get_spec() -> mujoco.MjSpec:
     spec = mujoco.MjSpec.from_file(str(ANYMAL_C_XML))
-    # spec.assets = get_assets(spec.meshdir)
+    spec.assets = get_assets(spec.meshdir)
     return spec
 
 
@@ -59,7 +59,7 @@ ANYMAL_C_ACTUATOR_CFG = BuiltinPositionActuatorCfg(
 ##
 
 INIT_STATE = EntityCfg.InitialStateCfg(
-    pos=(2.5, 2.5, 0.54), # For train_0_ceiling
+    pos=(2.5, 2.5, 0.54),  # For train_0_ceiling
     # pos=(2, 0, 0.54), # For FloorPlan1_physics
     joint_pos={
         ".*HAA": 0.0,
