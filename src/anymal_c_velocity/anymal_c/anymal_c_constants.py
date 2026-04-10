@@ -5,7 +5,7 @@ from pathlib import Path
 import mujoco
 from mjlab.actuator import BuiltinPositionActuatorCfg
 from mjlab.entity import EntityArticulationInfoCfg, EntityCfg
-from mjlab.utils.os import update_assets
+# from mjlab.utils.os import update_assets
 from mjlab.utils.spec_config import CollisionCfg
 
 ##
@@ -17,17 +17,17 @@ _HERE = Path(__file__).parent
 ANYMAL_C_XML: Path = _HERE / "xmls" / "anymal_c.xml"
 assert ANYMAL_C_XML.exists()
 
-
-def get_assets(meshdir: str) -> dict[str, bytes]:
-  assets: dict[str, bytes] = {}
-  update_assets(assets, ANYMAL_C_XML.parent / "assets", meshdir)
-  return assets
+#
+# def get_assets(meshdir: str) -> dict[str, bytes]:
+#     assets: dict[str, bytes] = {}
+#     update_assets(assets, ANYMAL_C_XML.parent / "assets", meshdir)
+#     return assets
 
 
 def get_spec() -> mujoco.MjSpec:
-  spec = mujoco.MjSpec.from_file(str(ANYMAL_C_XML))
-  spec.assets = get_assets(spec.meshdir)
-  return spec
+    spec = mujoco.MjSpec.from_file(str(ANYMAL_C_XML))
+    # spec.assets = get_assets(spec.meshdir)
+    return spec
 
 
 ##

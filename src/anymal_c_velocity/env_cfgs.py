@@ -148,20 +148,20 @@ def anymal_c_flat_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
     cfg.sim.mujoco.ccd_iterations = 50
     cfg.sim.contact_sensor_maxmatch = 64
 
-    # # Fixed overhead camera on the worldbody.
-    cam = CameraSensorCfg(
-        name="fov_cam",
-        parent_body="robot/base",
-        pos=(0.513, 0, 0.01497),
-        quat=(-0.5, -0.5, 0.5, 0.5),
-        fovy=60.0,
-        width=320,
-        height=240,
-        data_types=("segmentation",),
-        use_textures=False,
-        # use_shadows=True
-    )
-    cfg.scene.sensors += (cam, )
+    # # # Fixed overhead camera on the worldbody.
+    # cam = CameraSensorCfg(
+    #     name="fov_cam",
+    #     parent_body="robot/base",
+    #     pos=(0.513, 0, 0.01497),
+    #     quat=(-0.5, -0.5, 0.5, 0.5),
+    #     fovy=60.0,
+    #     width=320,
+    #     height=240,
+    #     data_types=("segmentation",),
+    #     use_textures=False,
+    #     # use_shadows=True
+    # )
+    # cfg.scene.sensors += (cam, )
 
     # _ROOM_XML = (
     #     Path(__file__).parent.parent.parent.parent
